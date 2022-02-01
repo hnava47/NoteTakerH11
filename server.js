@@ -16,7 +16,45 @@ app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, 'public/notes.
 
 app.get('/api/notes', (req, res) => res.json(notesData));
 
-// app.post('/api/notes', (req, res) => )
+const writeToFile = (destination, content) =>
+  fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
+    err ? console.error(err) : console.info(`\nData written to ${destination}`)
+  );
+
+const readAndAppend = (content, file) => {
+    fs.readFile(file, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+        } else {
+            const parsedData = JSON.parse(data);
+            parsedData.push(content);
+            writeToFile(file, parsedData);
+        }
+    });
+};
+
+app.post('/api/notes', (req, res) => {
+    const {text, title} = req.body;
+
+    if (req.body) {
+        const newNote = {
+            title,
+            text,
+            id: uuid()
+        };
+
+        readAndAppend(newNote, './db/db.json');
+
+        const response = {
+            status: 'success',
+            body: newNote
+        };
+
+        res.status(200).send(response);
+    } else {
+        res.status(400).send({error: 'Error in adding note'});
+    }
+});
 
 app.get('/*', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
 
