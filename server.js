@@ -50,9 +50,9 @@ app.post('/api/notes', (req, res) => {
             body: newNote
         };
 
-        res.status(200).json(response);
+        res.status(200).send(response);
     } else {
-        res.status(400).json({error: 'Error in adding note'});
+        res.status(400).send({error: 'Error in adding note'});
     }
 });
 
