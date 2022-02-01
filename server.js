@@ -33,6 +33,23 @@ const readAndAppend = (content, file) => {
     });
 };
 
+const removeIdAndWriteFile = (deleteId, file) => {
+    fs.readFile(file, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+        } else {
+            const parsedData = JSON.parse(data);
+            let newParsedData = [];
+            for (let i=0; i<parsedData.length; i++) {
+                if (parsedData[i].id !== deleteId) {
+                    newParsedData.push(parsedData[i]);
+                }
+            }
+            writeToFile(file, newParsedData);
+        }
+    });
+};
+
 app.post('/api/notes', (req, res) => {
     const {text, title} = req.body;
 
@@ -56,7 +73,17 @@ app.post('/api/notes', (req, res) => {
     }
 });
 
-app.delete('/api/notes/:id')
+app.delete('/api/notes/:id', (req, res) => {
+    const {id} = req.params;
+
+    if (id) {
+        removeIdAndWriteFile(id, './db/db.json');
+
+        res.status(200).send(`Removed note id: ${id}`);
+    } else {
+        res.status(400).send({error: 'Error in deleting note'});
+    }
+});
 
 app.get('/*', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
 
