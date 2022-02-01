@@ -14,6 +14,8 @@ app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, 'public/notes.
 
 app.get('/api/notes', (req, res) => res.json(notesData));
 
+// app.post('/api/notes', (req, res) => )
+
 app.get('/*', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
