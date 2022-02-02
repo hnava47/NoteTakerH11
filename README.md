@@ -34,7 +34,7 @@ The user also has the option to delete a note from the backend db.json file by c
 ![Delete][delete-note]
 
 You can access the updated website at the following link:
-* [Deployed Application]
+* [Deployed Application](https://notetakerapp-nava.herokuapp.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
